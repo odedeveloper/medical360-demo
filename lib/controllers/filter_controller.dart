@@ -9,15 +9,18 @@ class FilterController extends GetxController{
   final storage = GetStorage();
 
   var filterType = 0.obs;
+  var toggle = "no".obs;
   // will update the filter categories according to the filter type:
   var selectedFilter = "".obs;
   var filtersSelected = <dynamic>[].obs;
   var tempResponse = <dynamic>[].obs;
+  var returnCards = <dynamic>["some value"].obs;
   var tempFilteredData = <dynamic>[].obs;
+  var filterSentence = "".obs;
 
   void updateFilterType(text){
     print("Before update: ${filterType.value}");
-    if (text == "Gender, Age, Organization, Location and Disease of the patient"){
+    if (text == "Gender, Age, Location and Disease of the patient"){
       filterType.value = 1;
     }
     // else type 3
@@ -50,16 +53,23 @@ class FilterController extends GetxController{
   
 
     void performGenderFilter(actualData){
+      toggle.value = "yes";
+      returnCards.value = [];
+      filterSentence.value = "Variation of gender in the dataset";
       Map<String, int> gender = {};
       for(Map<String, dynamic>item in actualData){
         gender.update(item["gender"], (value) => value + 1, ifAbsent: () => 1);
       }
       tempFilteredData.value = gender.entries.map((entry) => {entry.key: entry.value}).toList();
       tempResponse.value = tempFilteredData.value;
+      returnCards.value = returnCards.value;
       print(tempFilteredData.value);
     }
 
     void performAgeFilter(actualData){
+      toggle.value = "yes";
+      returnCards.value = [];
+      filterSentence.value = "Variation of age groups in the dataset";
       Map<String, int> age = {"< 18 years" : 0, "18 - 25 years" : 0, "26 - 50 years" : 0, "> 50 years" : 0};
       for(Map<String, dynamic> item in actualData){
         if(int.parse(item["age"]) < 18){
@@ -73,28 +83,39 @@ class FilterController extends GetxController{
         }
       }
       tempFilteredData.value = age.entries.map((entry) => {entry.key: entry.value}).toList();
+      returnCards.value = returnCards.value;
       tempResponse.value = tempFilteredData.value;
     }
 
     void performLocationFilter(actualData){
+      toggle.value = "yes";
+      returnCards.value = [];
+      filterSentence.value = "Variation of zipcodes in the dataset";
       Map<String, int> location = {};
       for(Map<String, dynamic>item in actualData){
         location.update(item["location"], (value) => value + 1, ifAbsent: () => 1);
       }
       tempFilteredData.value = location.entries.map((entry) => {entry.key: entry.value}).toList();
+      returnCards.value = returnCards.value;
       tempResponse.value = tempFilteredData.value;
     }
 
     void performOrganizationFilter(actualData){
+      toggle.value = "yes";
+      returnCards.value = [];
       Map<String, int> organization = {};
       for(Map<String, dynamic>item in actualData){
         organization.update(item["organization"], (value) => value + 1, ifAbsent: () => 1);
       }
       tempFilteredData.value = organization.entries.map((entry) => {entry.key: entry.value}).toList();
+      returnCards.value = returnCards.value;
       tempResponse.value = tempFilteredData.value;
     }
 
     void performDiseaseFilter(actualData){
+      toggle.value = "yes";
+      returnCards.value = [];
+      filterSentence.value = "Variation of diseases in the dataset";
       Map<String, int> diseases = {};
       for(Map<String, dynamic> item in actualData){
         for(String disease in item["disease"]){
@@ -107,6 +128,7 @@ class FilterController extends GetxController{
       }
 
       tempFilteredData.value = diseases.entries.map((entry) => {entry.key: entry.value}).toList();
+      returnCards.value = returnCards.value;
       tempResponse.value = tempFilteredData.value;
     }
 

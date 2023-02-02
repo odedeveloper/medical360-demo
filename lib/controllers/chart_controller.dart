@@ -28,6 +28,7 @@ class ChartController extends GetxController{
         }
       }
       print(chartData.value);
+      chartData.value = chartData.value;
   }
 
 }

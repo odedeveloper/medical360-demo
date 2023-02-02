@@ -6,6 +6,7 @@ import 'package:get_storage/get_storage.dart';
 
 class SearchController extends GetxController{
 
+  var isLoading = "false".obs;
   final myText = "".obs;
   var storage = GetStorage();
   // don't change this - stores the actual API response
@@ -24,6 +25,7 @@ class SearchController extends GetxController{
     print("Now sending the request with text: ${myText}");
     
     // change to post later on 
+    isLoading.value = "true";
     final response;
 
     // whenever you get the correct api-url:
@@ -41,7 +43,7 @@ class SearchController extends GetxController{
         // print(responseData.value);
         storage.write("actualResponse", responseData.value);
         // print(storage.read("actualResponse"));
-
+        isLoading.value = "false";
         if(response.statusCode == 200){
           return responseData.value; 
         }else{
@@ -60,11 +62,27 @@ class SearchController extends GetxController{
 
       var data = jsonDecode(response.body);
       // print("Query 3 data: ${data}");
+//       data = {
+//     "01": {
+//         "Diabetes": 1,
+//         "Heart Patient": 2
+//     },
+//     "06": {
+//         "Heart Patient": 2
+//     },
+//     "07": {
+//         "Heart Patient": 1
+//     },
+//     "08": {
+//         "Heart Patient": 1
+//     }
+// };
 
+// creates a list of objects with key as month 
       responseData.value = data.entries.map((e) => {e.key: e.value}).toList();
       storage.write("actualResponse", responseData.value);
       print(storage.read("actualResponse"));
-
+      isLoading.value = "false";
       // print("Query3 response: ${responseData.value}");
 
       if(response.statusCode == 200){
@@ -96,8 +114,9 @@ class SearchController extends GetxController{
   void updateQueryType(myText){
 
     // check if patient word is mentioned:
-    if (myText == "Gender, Age, Organization, Location and Disease of the patient"){
+    if (myText == "Gender, Age, Location and Disease of the patient"){
       queryType.value = 1;
+      print("query type has been updated");
     }
     // else type 3
     else if(myText == "Disease of the patient"){

@@ -32,7 +32,7 @@ class AnalyticsScreen extends StatelessWidget {
               ? const SizedBox(height: 20, width: 20)
               : const SizedBox(height: 0, width: 0),
           CustomAppBarWidget(
-            title: "Analytics -Data Vault",
+            title: "Analytics - Data Vault",
             subTitle: "",
           ),
 
@@ -94,9 +94,9 @@ class AnalyticsScreen extends StatelessWidget {
                                       chartController
                                           .convertActualDataToChartData();
                                     }
-                                    print(chartController.chartData.value);
-                                    print(chartController.chartData.value[0].x);
-                                    print(chartController.chartData.value[0].y);
+                                    // print(chartController.chartData.value);
+                                    // print(chartController.chartData.value[0].x);
+                                    // print(chartController.chartData.value[0].y);
                                   }),
                               IconButton(
                                 icon: const Icon(Icons.clear),
@@ -112,6 +112,8 @@ class AnalyticsScreen extends StatelessWidget {
                                   print(
                                       "The current query type right now is: ${searchController.queryType}");
                                   filterController.tempFilteredData.value = [];
+                                  filterController.tempResponse.value = [];
+                                  filterController.toggle.value = "no";
                                   textController.clear();
                                   FocusScope.of(context).unfocus();
                                 },
@@ -176,6 +178,7 @@ class AnalyticsScreen extends StatelessWidget {
                 )
               ]),
           const Padding(padding: EdgeInsets.all(5)),
+          // Obx(() => (searchController.queryType.value != 0 && searchController.isLoading.value == "true") ? Center(child: CircularProgressIndicator()) : SizedBox(height: 0, width: 0)),
           Obx(
             () => (searchController.queryType.value == 1 ||
                     searchController.queryType.value == 2)
@@ -183,12 +186,25 @@ class AnalyticsScreen extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                     child: Align(
                       alignment: Alignment.topLeft,
-                      child: Text(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
                           "Recent ( ${filterController.tempResponse.value.length} )",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 15,
                               color: HexColor("#297D6B"))),
+                          Obx(() => (filterController.tempResponse.value.length != 0 && filterController.toggle == "no") ? 
+                              Text("Select any one of the filters from the filter button to continue", style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: HexColor("#297D6B"))) : Text("${filterController.filterSentence.value}", style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: HexColor("#297D6B"))))
+                        ]
+                      )
                     ),
                   )
                 : (searchController.queryType.value == 0)
@@ -230,6 +246,7 @@ class AnalyticsScreen extends StatelessWidget {
                         ),
                       ),
           ),
+          Obx(() => (searchController.queryType.value != 0 && searchController.isLoading.value == "true") ? Center(child: CircularProgressIndicator()) : SizedBox(height: 0, width: 0)),
 
           // render the cards on the screen
           Expanded(
@@ -330,7 +347,7 @@ class MyDialog extends StatelessWidget {
         }).toList(),
       ),
       actions: <Widget>[
-        FloatingActionButton(
+        ElevatedButton(
             child: Text('Apply', style: TextStyle(fontWeight: FontWeight.bold)),
             onPressed: () {
               // should send the filter array to the perform filter function
@@ -342,3 +359,7 @@ class MyDialog extends StatelessWidget {
     );
   }
 }
+
+
+
+
