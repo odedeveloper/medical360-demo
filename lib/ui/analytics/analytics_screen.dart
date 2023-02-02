@@ -146,6 +146,7 @@ class AnalyticsScreen extends StatelessWidget {
                                     'Gender',
                                     'Age',
                                     'Location',
+                                    'Disease',
                                   ]);
                                   // ignore: unrelated_type_equality_checks
                                 } else if (filterController.filterType == 2) {

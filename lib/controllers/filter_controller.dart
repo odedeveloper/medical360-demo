@@ -62,13 +62,13 @@ class FilterController extends GetxController{
     void performAgeFilter(actualData){
       Map<String, int> age = {"< 18 years" : 0, "18 - 25 years" : 0, "26 - 50 years" : 0, "> 50 years" : 0};
       for(Map<String, dynamic> item in actualData){
-        if(item["age"] < 18){
+        if(int.parse(item["age"]) < 18){
           age["< 18 years"] = (age["< 18 years"]! + 1);
-        }else if (item["age"] >= 18 && item["age"] <= 25){
+        }else if (int.parse(item["age"]) >= 18 && int.parse(item["age"]) <= 25){
           age["18 - 25 years"] = (age["18 - 25 years"]! + 1);
-        }else if (item["age"] >= 26 && item["age"] <= 50){
+        }else if (int.parse(item["age"]) >= 26 && int.parse(item["age"]) <= 50){
           age["26 - 50 years"] = (age["26 - 50 years"]! + 1);
-        }else{
+        }else if (int.parse(item["age"]) > 50){
           age["> 50 years"] = (age["> 50 years"]! + 1);
         }
       }
@@ -96,9 +96,16 @@ class FilterController extends GetxController{
 
     void performDiseaseFilter(actualData){
       Map<String, int> diseases = {};
-      for(Map<String, dynamic>item in actualData){
-        diseases.update(item["organization"], (value) => value + 1, ifAbsent: () => 1);
+      for(Map<String, dynamic> item in actualData){
+        for(String disease in item["disease"]){
+          if(diseases.containsKey(disease)){
+            diseases[disease] = diseases[disease]! + 1; 
+          }else{
+            diseases[disease] = 1;
+          }
+        }
       }
+
       tempFilteredData.value = diseases.entries.map((entry) => {entry.key: entry.value}).toList();
       tempResponse.value = tempFilteredData.value;
     }
