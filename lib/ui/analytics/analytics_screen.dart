@@ -114,6 +114,7 @@ class AnalyticsScreen extends StatelessWidget {
                                   filterController.tempFilteredData.value = [];
                                   filterController.tempResponse.value = [];
                                   filterController.toggle.value = "no";
+                                  filterController.tempResponse.value = [];
                                   textController.clear();
                                   FocusScope.of(context).unfocus();
                                 },
@@ -221,7 +222,7 @@ class AnalyticsScreen extends StatelessWidget {
                                   const BoxDecoration(color: Colors.white),
                               child: BarChart(BarChartData(
                                   alignment: BarChartAlignment.center,
-                                  maxY: 20,
+                                  maxY: 3,
                                   minY: 0,
                                   borderData: FlBorderData(
                                       border: const Border(
