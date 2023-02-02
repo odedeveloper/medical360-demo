@@ -73,13 +73,13 @@ class FilterController extends GetxController{
       Map<String, int> age = {"< 18 years" : 0, "18 - 25 years" : 0, "26 - 50 years" : 0, "> 50 years" : 0};
       for(Map<String, dynamic> item in actualData){
         if(int.parse(item["age"]) < 18){
-          age["< 18 years"] = (age["< 18 years"]! + 1);
+          age["less than 18 years"] = (age["< 18 years"]! + 1);
         }else if (int.parse(item["age"]) >= 18 && int.parse(item["age"]) <= 25){
           age["18 - 25 years"] = (age["18 - 25 years"]! + 1);
         }else if (int.parse(item["age"]) >= 26 && int.parse(item["age"]) <= 50){
           age["26 - 50 years"] = (age["26 - 50 years"]! + 1);
         }else if (int.parse(item["age"]) > 50){
-          age["> 50 years"] = (age["> 50 years"]! + 1);
+          age["more than 50 years"] = (age["> 50 years"]! + 1);
         }
       }
       tempFilteredData.value = age.entries.map((entry) => {entry.key: entry.value}).toList();
