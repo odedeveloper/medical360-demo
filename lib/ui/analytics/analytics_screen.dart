@@ -20,6 +20,23 @@ class AnalyticsScreen extends StatelessWidget {
   final textController = TextEditingController();
   var storage = GetStorage();
 
+  List<Map<String, String>> month_to_disease = [
+    {"January": "Diabetes: 1"},
+    {"February": "No disease recorded"},
+    {"March": "No disease recorded"},
+    {"April": "No disease recorded"},
+    {"May": "No disease recorded"},
+    {"June": "Heart patient: 2"},
+    {"July": "Heart patient; 1"},
+    {"August": "Heart patient: 1"},
+    {"September": "No disease recorded"},
+    {"October": "No disease recorded"},
+    {"November": "No disease recorded"},
+    {"December": "No disease recorded"}
+  ];
+
+
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -208,51 +225,76 @@ class AnalyticsScreen extends StatelessWidget {
                       )
                     ),
                   )
-                : (searchController.queryType.value == 0)
-                    ? const SizedBox(width: 100, height: 100)
-                    : Padding(
-                        padding: const EdgeInsets.all(50),
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: SizedBox(
-                            width: context.width * 0.7,
-                            height: 400,
-                            child: DecoratedBox(
-                              decoration:
-                                  const BoxDecoration(color: Colors.white),
-                              child: BarChart(BarChartData(
-                                  alignment: BarChartAlignment.center,
-                                  maxY: 3,
-                                  minY: 0,
-                                  borderData: FlBorderData(
-                                      border: const Border(
-                                    top: BorderSide.none,
-                                    right: BorderSide.none,
-                                    left: BorderSide(width: 1),
-                                    bottom: BorderSide(width: 1),
-                                  )),
-                                  barGroups: chartController.chartData.value
-                                      .map((dataItem) => BarChartGroupData(
-                                              x: dataItem.x,
-                                              barRods: [
-                                                BarChartRodData(
-                                                    fromY: 0,
-                                                    toY: dataItem.y.toDouble(),
-                                                    width: 20,
-                                                    color: HexColor("#40AB94")),
-                                              ]))
-                                      .toList())),
-                            ),
-                          ),
-                        ),
-                      ),
+                : 
+                SizedBox(width: 0, height: 0)
+                // (searchController.queryType.value == 0)
+                //     ? const SizedBox(width: 100, height: 100)
+                //     : Padding(
+                //         padding: const EdgeInsets.all(50),
+                //         child: SingleChildScrollView(
+                //           scrollDirection: Axis.horizontal,
+                //           child: SizedBox(
+                //             width: context.width * 0.7,
+                //             height: 400,
+                //             child: DecoratedBox(
+                //               decoration:
+                //                   const BoxDecoration(color: Colors.white),
+                //               child: BarChart(BarChartData(
+                //                   alignment: BarChartAlignment.center,
+                //                   maxY: 3,
+                //                   minY: 0,
+                //                   borderData: FlBorderData(
+                //                       border: const Border(
+                //                     top: BorderSide.none,
+                //                     right: BorderSide.none,
+                //                     left: BorderSide(width: 1),
+                //                     bottom: BorderSide(width: 1),
+                //                   )),
+                //                   barGroups: chartController.chartData.value
+                //                       .map((dataItem) => BarChartGroupData(
+                //                               x: dataItem.x,
+                //                               barRods: [
+                //                                 BarChartRodData(
+                //                                     fromY: 0,
+                //                                     toY: dataItem.y.toDouble(),
+                //                                     width: 20,
+                //                                     color: HexColor("#40AB94")),
+                //                               ]))
+                //                       .toList())),
+                //             ),
+                //           ),
+                //         ),
+                //       ),
           ),
           Obx(() => (searchController.queryType.value != 0 && searchController.isLoading.value == "true") ? Center(child: CircularProgressIndicator()) : SizedBox(height: 0, width: 0)),
 
           // render the cards on the screen
+
+          Obx(() => searchController.queryType == 3 ?
           Expanded(
-            child: Obx(
-              () => ListView.builder(
+            // child: Obx(() => searchController.queryType.value == 3? 
+            child: ListView.builder(
+              itemCount: 12,
+              itemBuilder: (context, index){
+                return Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Container(
+                    height: 100,
+                    child: CustomCard(
+                      month: "${month_to_disease[index].keys}",
+                      diseases: "${month_to_disease[index].values}"
+                    )
+                  ),
+                );
+              }
+            ) 
+          )
+            : SizedBox(height: 0, width: 0),
+          ),
+
+          Obx(() => (searchController.queryType != 3 && searchController.queryType != 0)?
+            Expanded(
+              child: ListView.builder(
                   itemCount: filterController.tempFilteredData.value == null ||
                           filterController.filterType != 1 &&
                               filterController.filterType != 2
@@ -271,9 +313,6 @@ class AnalyticsScreen extends StatelessWidget {
                               //
                             },
                             child: Column(children: [
-                              // filterController.filterType.value != 1
-                              // ? Text("Data item ${index}")
-                              // Column(children: [
                               Padding(padding: EdgeInsets.all(10)),
                               Align(
                                 alignment: Alignment.topLeft,
@@ -309,7 +348,7 @@ class AnalyticsScreen extends StatelessWidget {
                       ),
                     );
                   }),
-            ),
+            ) : SizedBox(width: 0, height: 0),
           )
         ],
       ),
@@ -362,5 +401,72 @@ class MyDialog extends StatelessWidget {
 }
 
 
+class CustomCard extends StatelessWidget {
+  const CustomCard({super.key, required this.month, required this.diseases});
+  
+  final String month;
+  final String diseases;   
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+          elevation: 5,
+          shadowColor: Colors.grey,
+          child: Column(
+            children: [
+              Padding(padding: EdgeInsets.all(10)),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                  child: Text(
+                      "${month}",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25,
+                          color: HexColor("#297D6B"))),
+                ),
+              ),
+              Padding(padding: EdgeInsets.all(4)),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                  child: Text(
+                      "${diseases}",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: HexColor("#40AB94"))),
+                ),
+              )
+                ]),
+              );
+  }
+}
 
 
+class MyCards extends StatelessWidget {
+  const MyCards({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+            CustomCard(month: "January", diseases: ""),
+            CustomCard(month: "February", diseases: ""),
+            CustomCard(month: "March", diseases: ""),
+            CustomCard(month: "April", diseases: ""),
+            CustomCard(month: "May", diseases: ""),
+            CustomCard(month: "June", diseases: ""),
+            CustomCard(month: "July", diseases: ""), 
+            CustomCard(month: "August", diseases: ""),
+            CustomCard(month: "September", diseases: ""),
+            CustomCard(month: "October", diseases: ""),
+            CustomCard(month: "November", diseases: ""),
+            CustomCard(month: "December", diseases: ""),
+          ]
+    );
+  }
+}
