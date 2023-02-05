@@ -186,27 +186,33 @@ class AnalyticsScreen extends StatelessWidget {
                 ? Padding(
                     padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                     child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                          "Recent ( ${filterController.tempResponse.value.length} )",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: HexColor("#297D6B"))),
-                          Obx(() => (filterController.tempResponse.value.length != 0 && filterController.toggle == "no") ? 
-                              Text("Select any one of the filters from the filter button to continue", style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: HexColor("#297D6B"))) : Text("${filterController.filterSentence.value}", style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                              color: HexColor("#297D6B"))))
-                        ]
-                      )
-                    ),
+                        alignment: Alignment.topLeft,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                  "Total ${filterController.tempResponse.value.length} records !",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                      color: HexColor("#297D6B"))),
+                              Obx(() => (filterController
+                                              .tempResponse.value.length !=
+                                          0 &&
+                                      filterController.toggle == "no")
+                                  ? Text(
+                                      "Select any one of the filters from the filter button to continue",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                          color: HexColor("#297D6B")))
+                                  : Text(
+                                      "${filterController.filterSentence.value}",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                          color: HexColor("#297D6B"))))
+                            ])),
                   )
                 : (searchController.queryType.value == 0)
                     ? const SizedBox(width: 100, height: 100)
@@ -247,7 +253,10 @@ class AnalyticsScreen extends StatelessWidget {
                         ),
                       ),
           ),
-          Obx(() => (searchController.queryType.value != 0 && searchController.isLoading.value == "true") ? Center(child: CircularProgressIndicator()) : SizedBox(height: 0, width: 0)),
+          Obx(() => (searchController.queryType.value != 0 &&
+                  searchController.isLoading.value == "true")
+              ? Center(child: CircularProgressIndicator())
+              : SizedBox(height: 0, width: 0)),
 
           // render the cards on the screen
           Expanded(
@@ -360,7 +369,3 @@ class MyDialog extends StatelessWidget {
     );
   }
 }
-
-
-
-
